@@ -1,0 +1,7 @@
+﻿     Creating library D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\x64\Release\MainProgram.lib and object D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\x64\Release\MainProgram.exp
+dllMain.obj : error LNK2001: unresolved external symbol UnloadPlugins
+dllMain.obj : error LNK2001: unresolved external symbol LoadPlugins_
+dllMain.obj : error LNK2001: unresolved external symbol ShowInfo
+dllMain.obj : error LNK2001: unresolved external symbol Exit
+dllMain.obj : error LNK2001: unresolved external symbol RunPlugins
+D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\x64\Release\MainProgram.exe : fatal error LNK1120: 5 unresolved externals
