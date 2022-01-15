@@ -1,0 +1,8 @@
+﻿  dllMain.cpp
+D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\MainProgram\dllMain.cpp(16,10): warning C4477: 'scanf_s' : format string '%i' requires an argument of type 'int *', but variadic argument 1 has type 'bool *'
+     Creating library D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\Release\MainProgram.lib and object D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\Release\MainProgram.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 7 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  MainProgram.vcxproj -> D:\projects C++\labs_SP\labsInSystemProgrammingBSU\labsInSystemProgrammingBSU\Лабораторная работа №5\Лабораторная работа №5\Lab5_SP\Release\MainProgram.exe
