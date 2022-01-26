@@ -11,4 +11,5 @@
 ## Output
 Выведите последовательность ключей вершин, полученную прямым левым обходом дерева.
 ## Examples
+
 ![Screenshot from 2022-01-26 13-08-05](https://user-images.githubusercontent.com/74289746/151168491-27840d9c-33d9-475b-83cf-d9a9d94c0573.png)
