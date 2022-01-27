@@ -1,0 +1,7 @@
+﻿F:\visual studio\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: промежуточный каталог (x64\Release\) содержит файлы, которые используются совместно с другим проектом (OpenMP.vcxproj).  Это может привести к ошибкам очистки и перестроения.
+  Derivative.cpp
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+  All 32 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  OpenMP.vcxproj -> F:\АК\lab2\OpenMP\x64\Release\Derivative.exe
