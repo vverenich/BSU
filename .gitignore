@@ -1,2 +1,26 @@
 /sem3/System Programming/lab_1_dns_src/DNS/.vs/DNS/v16/Browse.VC.opendb
 /sem3/System Programming/lab_3/lab_3/lab_3.cpp
+*.zip
+*idx
+*dat
+*.project
+*.classpath
+bin
+*.settings*
+*.sln
+Debug
+*.vs
+*vcxproj*
+.DS_Store
+*.exe*
+*.obj*
+*.tlog*
+*.recipe*
+*.log*
+*,pdb
+*.iobj*
+*.ipdb
+*.class
+*.MF
+*.idea*
+*.iml
