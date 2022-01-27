@@ -1,1 +1,1 @@
-My labs in BSU :)
+Labs in BSU :)
