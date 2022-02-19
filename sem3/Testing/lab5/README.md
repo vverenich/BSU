@@ -7,4 +7,4 @@ https://coderlessons.com/tutorials/kachestvo-programmnogo-obespecheniia/izuchite
 
 Проработайте уроки https://coderlessons.com/tutorials/kachestvo-programmnogo-obespecheniia/izuchite-testlink/testlink-tutorial
 
-Оформите отчет.
+Оформите отчет. 
