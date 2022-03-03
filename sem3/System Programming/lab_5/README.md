@@ -5,7 +5,7 @@
 BOOLEAN GetAuthor(LPSTR buffer, DWORD dwBufferSize, DWORD* pdwBytesWritten); // автор плагина
 
 BOOLEAN GetDescription(LPSTR buffer, DWORD dwBufferSize, DWORD* pdwBytesWritten); // описание плагина
-
+ 
 VOID Execute(); // произвольное действие. Желательно вывод какой-нибудь системной информации, например число разделов на жестком диске, количество и тип процессоров, присутствуют ли в системе cd/dvd …
 
 Функции экспортируются из библиотеки по соглашению stdcall. Плагины находятся в каталоге Plugins, расположенном в каталоге с программой
