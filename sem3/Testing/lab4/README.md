@@ -6,5 +6,5 @@ http://getbug.ru/testcomplete-avtomatizatsiya-testirovaniya/
 
 ## Задание.
 Изучить порядок установки и произвести тестирование приложений в
-TestComplete приложений.
+TestComplete приложений. 
 Составить отчет со скринами и соответствующими выводами.
