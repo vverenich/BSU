@@ -3,7 +3,7 @@
 Here is what you need to do:
 1. Create a fork of this repo on Github.
 2. Clone this fork on your local machine. 
-3. Create your own branch from master. 
+3. Create your own branch from master.  
 4. Add files(that you find useful) or fix some bugs in existing files.
 5. When you are done with your work, push your branch to your fork on Github.
 6. From your fork open a pull request in the correct branch. 
