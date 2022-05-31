@@ -8,7 +8,7 @@
 bin
 *.settings*
 *.sln*
-Debug
+Debug 
 *.vs*  
 *vcxproj*
 .DS_Store
