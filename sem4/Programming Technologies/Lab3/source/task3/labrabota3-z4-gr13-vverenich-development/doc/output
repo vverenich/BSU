@@ -1,0 +1,37 @@
+
+Book's number in array: 1
+	name: Bible
+	author surname: Komebody
+	author name: God
+	year: 0
+	publisher: Aversev
+	cost: 1000
+	price: 1500
+	profit: 500
+Book's number in array: 2
+	name: OneBook
+	author surname: Kerenich
+	author name: Vlad
+	year: 2020
+	publisher: Aversev
+	cost: 4000
+	price: 5000
+	profit: 1000
+Book's number in array: 3
+	name: BookOfRa
+	author surname: Khernenkov
+	author name: Artemus
+	year: 2019
+	publisher: Aversev
+	cost: 3000
+	price: 3500
+	profit: 500
+Book's number in array: 4
+	name: BookOfSun
+	author surname: Kudoy
+	author name: Andrew
+	year: 2003
+	publisher: Aversev
+	cost: 3789
+	price: 4789
+	profit: 1000

@@ -1,0 +1,242 @@
+
+// enrolee(name, average_mark)
+var dictEnrollee = Dictionary<String,String>()
+// vuz(name, passing_score)
+var dictVuz = Dictionary<String, String>()
+
+var  isExecutionFinished = false
+while (!isExecutionFinished)
+{
+    print("Choose option:")
+    print("1)Initialize enrollee dictionary(empty)")
+    print("2)Initialize vuz dictionary")
+    print("3)Get element count in the dictionary")
+    print("4)Get element value by key in dictionary")
+    print("5)Get all the elements of the dictionary")
+    print("6)Add pair in the dictionary")
+    print("7)Update element in dictionary")
+    print("8)Sort dictionary")
+    print("9)Delete elements")
+    print("10)Quit")
+    
+    var number:Int?
+    print("\nEnter your choice: ")
+    number = Int(readLine()!)
+    
+    switch number 
+    {
+        case 1:
+            dictEnrollee = Dictionary<String,String>()
+            print("\tEnrollee dictionary has been initialized")
+        case 2:
+            dictVuz["BSU"] = "360"
+            dictVuz["BSUIR"] = "260"
+            dictVuz["BNTU"] = "160"
+            dictVuz["BSMU"] = "390"
+            print("\tVuz dictionary has been initialized")
+        case 3:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            switch number 
+            {
+                case 1:
+                    let count = dictEnrollee.count
+                    print("\t\tdictEnrollee has \(count) elements.")
+                case 2:
+                    let count = dictVuz.count
+                    print("\t\tdictVuz has \(count) elements.")
+                default:
+                    print("\t\tWrong Input")
+            }
+        case 4:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            switch number
+            {
+                case 1:
+                    var key:String?
+                    key = String(readLine()!)
+                    let value = dictEnrollee[key!]
+                    print("\t\tValue: \(value!)")
+                case 2:
+                    dictVuz["BSU"] = "360"
+                    var key:String?
+                    key = String(readLine()!)
+                    print("\t\t\(key!)")
+                    let value = dictVuz[key!]
+                    print("\t\tValue: \(value!)")
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 5:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            switch number 
+            {
+                case 1:
+                    print("\t\t \(dictEnrollee)")
+                case 2:
+                    print("\t\t \(dictVuz)")
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 6:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            print("\t\tEnter the pair(key value): ")
+            let key = readLine()
+            let value = readLine()
+            
+            switch number 
+            {
+                case 1:
+                    dictEnrollee[key!] = value
+                    print("\t\tThe key has been successfully added")
+                case 2:
+                    dictVuz[key!] = value
+                    print("\t\tThe key has been successfully added")
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 7:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            print("\t\tEnter the pair(key value): ")
+            let key = readLine()
+            let value = readLine()
+            
+            switch number 
+            {
+                case 1:
+                    dictEnrollee[key!] = value
+                    print("\t\tThe key has been successfully added")
+                case 2:
+                    dictVuz[key!] = value
+                    print("\t\tThe key has been successfully added")
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 8:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            print("\t\tChoose type of sorting: ")
+            print("\t\t1)By key")
+            print("\t\t2)By value")
+            
+            print("\n\t\tEnter your choice: ")
+            let method = Int(readLine()!)
+            
+            switch number 
+            {
+                case 1:
+                    switch method
+                    {
+                        case 1:
+                            dictEnrollee.sorted {(first, second) -> Bool in return first.key > second.key}
+                        case 2:
+                            dictEnrollee.sorted {(first, second) -> Bool in return first.value > second.value}
+                        default:
+                            print("\t\tWrong Input")
+                    }
+            
+                case 2:
+                    switch method
+                    {
+                        case 1:
+                            dictVuz.sorted {(first, second) -> Bool in return first.key > second.key}
+                        case 2:
+                            dictVuz.sorted {(first, second) -> Bool in return first.value > second.value}
+                        default:
+                            print("\t\tWrong Input")
+                    }
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 9:
+            print("\tChoose dictionary:")
+            print("\t1)enrollee")
+            print("\t2)vuz")
+            
+            print("\n\tEnter your choice: ")
+            number = Int(readLine()!)
+            
+            print("\t\tChoose type of deleting: ")
+            print("\t\t1)By key")
+            print("\t\t2)Delete all elements")
+            
+            print("\n\t\tEnter your choice: ")
+            let method = Int(readLine()!)
+            
+            switch number 
+            {
+                case 1:
+                    switch method
+                    {
+                        case 1:
+                            print("\n\t\t\tEnter key: ")
+                            let key = readLine()
+                            dictEnrollee.removeValue(forKey: key!)
+                        case 2:
+                            dictEnrollee.removeAll()
+                        default:
+                            print("\t\tWrong Input")
+                    }
+            
+                case 2:
+                    switch method
+                    {
+                        case 1:
+                            print("\n\t\t\tEnter key: ")
+                            let key = readLine()
+                            dictVuz.removeValue(forKey: key!)
+                        case 2:
+                            dictVuz.removeAll()
+                        default:
+                            print("\t\tWrong Input")
+                    }
+                default:
+                    print("\t\tWrong Input")
+                    
+            }
+        case 10:
+            isExecutionFinished = true
+        default:
+            print("\tWrong choice")
+    }
+    isExecutionFinished = true
+}

@@ -1,0 +1,33 @@
+import Foundation
+import Glibc
+
+var number:Int?
+print("Enter a number")
+number = Int(readLine()!)
+
+let remainder = (number! % 10)
+
+switch remainder {
+        case 1:
+            print("Копейка")
+        case 2:
+            print("Копейки")
+        case 3:
+            print("Копейки")
+        case 4:
+            print("Копейки")
+        case 5:
+            print("Копеек")
+        case 6:
+            print("Копеек")
+        case 7:
+            print("Копеек")
+        case 8:
+            print("Копеек")
+        case 9:
+            print("Копеек")
+        case 0:
+            print("Копеек")
+        default:
+            print("Smth went wrong")
+    }
