@@ -7,4 +7,4 @@ Here is what you need to do:
 4. Add files(that you find useful) or fix some bugs in existing files.
 5. When you are done with your work, push your branch to your fork on Github.
 6. From your fork open a pull request in the correct branch. 
-7. Once the pull request is approved and merged you can pull the changes from the remote repo to local repo and delete your extra branches. 
+7. Once the pull request is approved and merged you can pull the changes from the remote repo to local repo and delete your extra branches.  
