@@ -20,7 +20,7 @@ Debug
 *.pdb*
 *.iobj*
 *.ipdb*
-*.class*
+*.class* 
 *.MF*
 *.idea*
 *.iml* 
