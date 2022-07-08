@@ -7,7 +7,7 @@
 *.classpath
 bin
 *.settings*
-*.sln*
+*.sln* 
 Debug 
 *.vs*  
 *vcxproj*
