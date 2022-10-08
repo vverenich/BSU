@@ -1,0 +1,5 @@
+tetgen.exe -ga 10000000  proj12.poly
+or
+tetgen.exe -g  proj12.poly
+or
+tetgen.exe -ga 0.00001  proj12.poly
