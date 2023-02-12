@@ -1,0 +1,87 @@
+/***************************************************************************************************
+Sequential
+***************************************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <future>
+#include <numeric>
+#include <algorithm>
+
+int main()
+{
+    const size_t c_N = 1'000'000;
+    std::vector<int> v(c_N);
+    std::iota(v.begin(), v.end(), -1);
+
+
+    auto start = std::chrono::steady_clock::now();
+    std::vector<int>::iterator result = std::min_element(v.begin(), v.end());
+    auto end = std::chrono::steady_clock::now();
+
+
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << "result: " << *result;
+
+    return 0;
+}
+
+/***************************************************************************************************/
+
+/***************************************************************************************************
+packaged_task
+***************************************************************************************************/
+#include <iostream>
+#include <vector>
+#include <future>
+#include <numeric>
+#include <algorithm>
+
+std::vector<int>::iterator getMinElement(std::vector<int>::iterator begin, std::vector<int>::iterator end)
+{
+    return std::min_element(begin, end);
+}
+
+
+int main()
+{
+    const size_t c_N = 1'000;
+    const size_t c_ThreadNumber = 4;
+    std::vector<int> v(c_N);
+    std::iota(v.begin(), v.end(), -1);
+
+
+    auto start = std::chrono::steady_clock::now();
+
+    std::vector<std::packaged_task<std::vector<int>::iterator (std::vector<int>::iterator, std::vector<int>::iterator)>> packaged_tasks(c_ThreadNumber);
+    std::vector<std::future<std::vector<int>::iterator>> results(c_ThreadNumber);
+    size_t i;
+    for (i = 0; i < c_ThreadNumber - 1; ++i) {
+        packaged_tasks.at(i) = std::packaged_task<std::vector<int>::iterator (std::vector<int>::iterator, std::vector<int>::iterator)>(getMinElement);
+        results.at(i) = std::future<std::vector<int>::iterator>(packaged_tasks.at(i).get_future());
+        packaged_tasks.at(i)(v.begin() + i * c_N / c_ThreadNumber, v.begin() + (i + 1) * c_N / c_ThreadNumber);
+    }
+
+    packaged_tasks.at(i) = std::packaged_task<std::vector<int>::iterator (std::vector<int>::iterator, std::vector<int>::iterator)>(getMinElement);
+    results.at(i) = std::future<std::vector<int>::iterator>(packaged_tasks.at(i).get_future());
+    packaged_tasks.at(i)(v.begin() + i * c_N / c_ThreadNumber, v.end());
+
+    std::vector<int> numbers(c_ThreadNumber);
+    for (auto& i : numbers) {
+        i = *results.at(i).get();
+    }
+
+    std::vector<int>::iterator result = std::min_element(numbers.begin(), numbers.end());
+
+    auto end = std::chrono::steady_clock::now();
+
+
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << "result: " << *result;
+
+    return 0;
+}
+/***************************************************************************************************/
+

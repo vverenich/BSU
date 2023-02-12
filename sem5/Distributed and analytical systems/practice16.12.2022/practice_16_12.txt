@@ -1,0 +1,139 @@
+/***************************************************************************************************
+Sequential
+***************************************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <omp.h>
+#include <fstream>
+#include <queue>
+#include <chrono>
+
+int main() {
+    const int VECTOR_SIZE = 6;
+    std::queue<std::vector<double>> vectors;
+    std::vector<double> temp;
+    double number;
+    bool finished = false;
+    temp.reserve(VECTOR_SIZE);
+    auto start = std::chrono::high_resolution_clock::now();
+    {
+        {
+            //            std::cout << omp_get_thread_num() << "\n";
+            std::ifstream in("vectors.txt");
+            while (!in.eof()) {
+                temp.clear();
+                for (int i = 0; i < VECTOR_SIZE; ++i) {
+                    in >> number;
+                    temp.emplace_back(number);
+                }
+                vectors.push(temp);
+            }
+            finished = true;
+        }
+        {
+            std::vector<double> first;
+            std::vector<double> second;
+            while (!finished || !vectors.empty()) {
+                if (!vectors.empty()) {
+                    first = vectors.front();
+                    vectors.pop();
+                    while (vectors.empty()) {}
+                    second = vectors.front();
+                    vectors.pop();
+                    double result = 0;
+                    for (int i = 0; i < VECTOR_SIZE; ++i) {
+                        result += first[i] * second[i];
+                    }
+                }
+            }
+        }
+    }
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << "Time of execution: " << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()
+              << " ms\n";
+
+    return 0;
+}
+
+***************************************************************************************************/
+
+/***************************************************************************************************
+packaged_task
+***************************************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <omp.h>
+#include <fstream>
+#include <queue>
+#include <chrono>
+
+int main() {
+    const int VECTOR_SIZE = 6;
+    std::queue<std::vector<double>> vectors;
+    std::vector<double> temp;
+    double number;
+    bool finished = false;
+    temp.reserve(VECTOR_SIZE);
+    auto start = std::chrono::high_resolution_clock::now();
+#pragma omp parallel sections default(none) shared(vectors, finished, VECTOR_SIZE, std::cout) private(temp, number)
+    {
+#pragma omp section
+        {
+            std::ifstream in("vectors.txt");
+            while (!in.eof()) {
+                temp.clear();
+                for (int i = 0; i < VECTOR_SIZE; ++i) {
+                    in >> number;
+                    temp.emplace_back(number);
+                }
+                vectors.push(temp);
+            }
+            finished = true;
+        }
+#pragma omp section
+        {
+            std::vector<double> first;
+            std::vector<double> second;
+            while (!finished || !vectors.empty()) {
+                if (!vectors.empty()) {
+                    first = vectors.front();
+                    vectors.pop();
+                    while (vectors.empty()) {}
+                    second = vectors.front();
+                    vectors.pop();
+                    double result = 0;
+                    for (int i = 0; i < VECTOR_SIZE; ++i) {
+                        result += first[i] * second[i];
+                    }
+                }
+            }
+        }
+    }
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << "Time of execution: " << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()
+              << " ms\n";
+
+    return 0;
+}
+
+/***************************************************************************************************/
+
+results
+
+-----------------------------------------------------------------------------------------
+Размерность задачи  |время последовательной |параллельная на 2 процессорах              |
+                    |                       |--------------------------------------------
+                    |                       |Время  |Ускорение  |Эффективность          |
+-----------------------------------------------------------------------------------------
+10000               |135                    |218    |0.629      |0.3096                 |
+-----------------------------------------------------------------------------------------
+25000               |589                    |729    |0.807      |0.4039                 |
+-----------------------------------------------------------------------------------------
+50000               |1307                   |1477   |0.884      |0.442                  |
+-----------------------------------------------------------------------------------------
+
+
+
+

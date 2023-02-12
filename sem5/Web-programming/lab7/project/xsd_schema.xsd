@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.epamcourses.by/medicins"
+           xmlns:tns="http://www.epamcourses.by/medicins"
+           elementFormDefault="qualified">
+
+	<complexType name="com.verenich.Entities.Broccoli">
+        <sequence>
+            <element name="calories" type="string"/>
+            <element name="proteins" type="string"/>
+		<element name="fats" type="string"/>
+		<element name="carbohydrates" type="string"/>
+        </sequence>
+    	</complexType>
+
+	<complexType name="com.verenich.Entities.Cucumber">
+        <sequence>
+            <element name="calories" type="string"/>
+            <element name="proteins" type="string"/>
+		<element name="fats" type="string"/>
+		<element name="carbohydrates" type="string"/>
+        </sequence>
+    	</complexType>
+
+	<complexType name="com.verenich.Entities.Onion">
+        <sequence>
+            <element name="calories" type="string"/>
+            <element name="proteins" type="string"/>
+		<element name="fats" type="string"/>
+		<element name="carbohydrates" type="string"/>
+        </sequence>
+    	</complexType>
+
+	<complexType name="com.verenich.Entities.Shallot">
+        <sequence>
+            <element name="calories" type="string"/>
+            <element name="proteins" type="string"/>
+		<element name="fats" type="string"/>
+		<element name="carbohydrates" type="string"/>
+        </sequence>
+    	</complexType>
+
+</xsd:schema>

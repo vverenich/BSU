@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.verenich.Builders"},{"l":"com.verenich.Directors"},{"l":"com.verenich.Entities"},{"l":"com.verenich.lab2_var4"},{"l":"com.verenich.Salads"},{"l":"com.verenich.service"}];updateSearchResults();

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Log In Example</string>
+    <string name="UserName">login:</string>
+    <string name="Password">password:</string>
+    <string name="Confirm">confirm</string>
+    <string name="LogOut">Log out</string>
+    <string name="LogIn_1">Hi, </string>
+    <string name="LogIn_2">, welcome!</string>
+</resources>

@@ -1,0 +1,136 @@
+=================================
+Code
+=================================
+
+#include <queue>
+#include <memory>
+#include <mutex>
+#include <condition_variable>
+#include <fstream>
+#include <algorithm>
+#include <thread>
+#include <iostream>
+
+template<typename T>
+class threadsafe_queue
+{
+private:
+     mutable std::mutex mut;
+     std::queue<T> data_queue;
+     std::condition_variable data_cond;
+public:
+     threadsafe_queue()
+     {}
+     threadsafe_queue(threadsafe_queue const& other)
+     {
+         std::lock_guard<std::mutex> lk(other.mut);
+         data_queue=other.data_queue;
+     }
+     void push(T new_value)
+     {
+         std::lock_guard<std::mutex> lk(mut);
+         data_queue.push(new_value);
+         data_cond.notify_one();
+     }
+     void wait_and_pop(T& value)
+     {
+         std::unique_lock<std::mutex> lk(mut);
+         data_cond.wait(lk,[this]{return !data_queue.empty();});
+         value=data_queue.front();
+         data_queue.pop();
+     }
+     std::shared_ptr<T> wait_and_pop()
+     {
+         std::unique_lock<std::mutex> lk(mut);
+         data_cond.wait(lk,[this]{return !data_queue.empty();});
+         std::shared_ptr<T> res(std::make_shared<T>(data_queue.front()));
+         data_queue.pop();
+         return res;
+     }
+    bool try_pop(T& value)
+    {
+        std::lock_guard<std::mutex> lk(mut);
+        if(data_queue.empty())
+        return false;
+        value=data_queue.front();
+        data_queue.pop();
+        return true;
+    }
+    std::shared_ptr<T> try_pop()
+    {
+        std::lock_guard<std::mutex> lk(mut);
+        if(data_queue.empty())
+        return std::shared_ptr<T>();
+        std::shared_ptr<T> res(std::make_shared<T>(data_queue.front()));
+        data_queue.pop();
+        return res;
+    }
+    bool empty() const
+    {
+        std::lock_guard<std::mutex> lk(mut);
+        return data_queue.empty();
+    }
+
+    T& front()
+    {
+        std::lock_guard<std::mutex> lk(mut);
+        return data_queue.front();
+    }
+};
+
+std::ofstream fout("output.txt");
+std::ifstream fin("input.txt");
+
+template<class T>
+void producerFunction(threadsafe_queue<T>& queue)
+{
+    while(!fin.eof()) {
+        std::string word;
+        fin >> word;
+        queue.push(word);
+    }
+}
+
+template<class T>
+void consumerFunction(threadsafe_queue<T>& queue)
+{
+    while (!queue.empty()) {
+        std::reverse(std::begin(queue.front()), std::end(queue.front()));
+        fout << queue.front() << "\n";
+        queue.wait_and_pop();
+    }
+}
+
+int main() {
+    auto start = std::chrono::steady_clock::now();
+
+    threadsafe_queue<std::string> queue{};
+
+    std::thread t1 {producerFunction<std::string>, std::ref(queue)};
+    std::thread t2 {consumerFunction<std::string>, std::ref(queue)};
+    t1.join();
+    t2.join();
+    std::cout << "finished!\n";
+
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+}
+
+
+
+=================================
+results
+=================================
+
+PREVIOUS:
+
+sequential(2,144 KB): 0.0383128s	parallel(2,144 KB): 0.116918s		acceleration: 0.327689492	efficiency:  0.163844746
+sequential(4,288 KB): 0.076519s	parallel(4,288 KB): 0.177556s		acceleration: 0.430956994	efficiency:  0.215478497
+sequential(8,575 KB): 0.171909s	parallel(8,575 KB): 0.390475s		acceleration: 0.440256098	efficiency:  0.220128049
+
+CURRENT:
+
+sequential(2,144 KB): 0.0383128s	parallel(2,144 KB): 0.11601s		acceleration: 0.330254288	efficiency:  0.165127144
+sequential(4,288 KB): 0.076519s	parallel(4,288 KB): 0.236095s		acceleration: 0.324102586	efficiency:  0.162051293
+sequential(8,575 KB): 0.171909s	parallel(8,575 KB): 0.503648s		acceleration: 0.341327673	efficiency:  0.170663837

@@ -1,0 +1,232 @@
+===================================================================================================
+Code(sequential program)
+===================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <random>
+#include <algorithm>
+
+template<class T>
+T findMaxValue(const std::vector<T>& vector)
+{
+    if(vector.empty()) {
+        throw std::length_error("std::vector obj is empty");
+    }
+
+    T maxValue{vector.front()};
+    for(const auto& element : vector) {
+        maxValue = std::max(element, maxValue);
+    }
+
+    return maxValue;
+}
+
+void fillVectorWithRandomIntNumbers(std::vector<int>& vector)
+{
+    std::random_device rnd_device;
+    std::mt19937 mersenne_engine {rnd_device()};  // Generates random integers
+    std::uniform_int_distribution<int> dist {1, 52};
+
+    auto gen = [&dist, &mersenne_engine](){
+                       return dist(mersenne_engine);
+                   };
+    std::generate(begin(vector), end(vector), gen);
+}
+
+void doTask()
+{
+    size_t n = 10'000'000;
+    std::vector<int> vector(n);
+    fillVectorWithRandomIntNumbers(vector);
+
+    clock_t start = clock();
+
+    int maxValue =  findMaxValue(vector);
+
+    clock_t end = clock();
+
+    printf("time elapsed: %.16f sec\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+}
+
+int main()
+{
+    doTask();
+
+    return 0;
+}
+
+
+===================================================================================================
+Code (parallel #1)
+===================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <random>
+#include <algorithm>
+#include <thread>
+
+template<typename Iterator,typename T>
+struct find_max
+{
+     void operator()(Iterator first,Iterator last,T& result)
+     {
+        result = *std::max_element(first, last);
+     }
+};
+
+template<typename Iterator,typename T>
+T parallel_find_max(Iterator first,Iterator last,T init)
+{
+     unsigned long const length=std::distance(first,last);
+     if(!length)
+        return init;
+     unsigned long const min_per_thread = 25;
+     unsigned long const max_threads = (length+min_per_thread-1)/min_per_thread;
+     unsigned long const hardware_threads = std::thread::hardware_concurrency();
+     unsigned long const num_threads = std::min(hardware_threads!=0?hardware_threads:2,max_threads);
+     unsigned long const block_size=length/num_threads;
+
+     std::vector<T> results(num_threads);
+     std::vector<std::thread> threads(num_threads-1);
+     Iterator block_start=first;
+
+     for(unsigned long i=0;i<(num_threads-1);++i)
+     {
+         Iterator block_end=block_start;
+         std::advance(block_end,block_size);
+         threads[i]=std::thread(find_max<Iterator ,T>(), block_start,block_end,std::ref(results[i]));
+         block_start=block_end;
+     }
+
+     find_max<Iterator,T>()(block_start, last, results[num_threads-1]);
+     for(auto& entry: threads)
+        entry.join();
+
+     return *std::max_element(results.begin(),results.end());
+
+
+}
+
+void fillVectorWithRandomIntNumbers(std::vector<int>& vector)
+{
+    std::random_device rnd_device;
+    std::mt19937 mersenne_engine {rnd_device()};  // Generates random integers
+    std::uniform_int_distribution<int> dist {1, 52};
+
+    auto gen = [&dist, &mersenne_engine](){
+                       return dist(mersenne_engine);
+                   };
+    std::generate(begin(vector), end(vector), gen);
+}
+
+void doTask()
+{
+    size_t n = 1'000'000'000;
+    std::vector<int> vector(n);
+    fillVectorWithRandomIntNumbers(vector);
+
+    clock_t start = clock();
+
+    int maxValue{};
+    maxValue = parallel_find_max(vector.begin(), vector.end(), maxValue);
+
+    clock_t end = clock();
+
+    printf("time elapsed: %.16f sec\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+}
+
+int main()
+{
+    doTask();
+
+    return 0;
+}
+
+===================================================================================================
+Code (parallel #2)
+===================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <random>
+#include <algorithm>
+#include <thread>
+#include <future>
+
+template <typename RAIter>
+int parallel_find_max(RAIter beg, RAIter end)
+{
+
+    typename RAIter::difference_type len = end-beg;
+    if(len < 5000000)
+        return *std::max_element(beg, end);
+
+    RAIter mid = beg + len/2;
+    auto handle = std::async(std::launch::async,
+                              parallel_find_max<RAIter>, mid, end);
+    int sum = parallel_find_max(beg, mid);
+    return std::max(handle.get(), sum);
+
+}
+
+void fillVectorWithRandomIntNumbers(std::vector<int>& vector)
+{
+    std::random_device rnd_device;
+    std::mt19937 mersenne_engine {rnd_device()};  // Generates random integers
+    std::uniform_int_distribution<int> dist {1, 52};
+
+    auto gen = [&dist, &mersenne_engine](){
+                       return dist(mersenne_engine);
+                   };
+    std::generate(begin(vector), end(vector), gen);
+}
+
+void doTask()
+{
+    size_t n = 1'000'000'000;
+    std::vector<int> vector(n);
+    fillVectorWithRandomIntNumbers(vector);
+
+    clock_t start = clock();
+
+    int maxValue{vector.front()};
+    maxValue = parallel_find_max(vector.begin(), vector.end());
+
+    clock_t end = clock();
+
+    printf("time elapsed: %.16f sec\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+}
+
+int main()
+{
+    doTask();
+
+    return 0;
+}
+
+===================================================================================================
+results
+===================================================================================================
+
+task1:
+---------------------------------------------------------------------------------------------------------------------
+Размерность задачи 	|Время выполнения  		||Время выполнения |Ускорение  ||Время выполнения |Ускорение  |
+(кол-во элементов)	|последовательной программы	||программы 1      |           ||программы 2      |           | 
+---------------------------------------------------------------------------------------------------------------------
+10000000			|0.004				||0.002            |2		 ||0.002            |2		  |  
+---------------------------------------------------------------------------------------------------------------------
+100000000			|0.057				||0.021	       |2.714285714||0.021         	  |2.714285714| 
+---------------------------------------------------------------------------------------------------------------------
+1000000000			|0.564999				||0.149            |3.791939597||0.149            |3.791939597|   
+---------------------------------------------------------------------------------------------------------------------
+
+
+

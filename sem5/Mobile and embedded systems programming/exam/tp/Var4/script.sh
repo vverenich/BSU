@@ -1,0 +1,1 @@
+awk '($3=="ПИ") {sum += $5; students_amount += 1} END {print("Average mark=",sum/students_amount, "\nStudents count=", students_amount)}' list_students.txt

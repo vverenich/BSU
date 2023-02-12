@@ -1,0 +1,223 @@
+===================================================================================================
+task 4(sequential)
+===================================================================================================
+
+#include <iostream>
+#include <omp.h>
+#include <random>
+#include <chrono>
+
+int find_min_in_row(int* row, int size) {
+    int min = row[0];
+    for (int i = 1; i < size; i++) {
+        if (row[i] < min) {
+            min = row[i];
+        }
+    }
+    return min;
+}
+
+int find_max(int* mins, int count) {
+    int max = mins[0];
+    for (int i = 1; i < count; i++) {
+        if (mins[i] > max) {
+            max = mins[i];
+        }
+    }
+    return max;
+}
+
+int main() {
+    int x = 10000;
+    int x2 = 10000;
+    int thread_count = 4;
+
+    srand(time(NULL));
+    int** matrix = new int* [x];
+    for (int i = 0; i < x; i++) {
+        matrix[i] = new int[x2];
+        for (int j = 0; j < x2; j++) {
+            matrix[i][j] = rand() % x;
+        }
+    }
+    int* mins = new int[x];
+    auto start = std::chrono::high_resolution_clock::now();
+    {
+        for (int i = 0; i < x; i++) {
+            mins[i] = find_min_in_row(matrix[i], x2);
+        }
+    }
+    int max = find_max(mins, x);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Max value: " << max << std::endl;
+    std::cout << "Time of execution: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    for (int i{0}; i < x; ++i) {
+        delete matrix[x];
+    }
+
+    delete[] matrix;
+    delete[] mins;
+}
+
+===================================================================================================
+task 1(#pragma omp for)
+===================================================================================================
+
+#include <iostream>
+#include <omp.h>
+#include <random>
+#include <chrono>
+
+int find_min_in_row(int* row, int size) {
+    int min = row[0];
+    for (int i = 1; i < size; i++) {
+        if (row[i] < min) {
+            min = row[i];
+        }
+    }
+    return min;
+}
+
+int find_max(int* mins, int count) {
+    int max = mins[0];
+    for (int i = 1; i < count; i++) {
+        if (mins[i] > max) {
+            max = mins[i];
+        }
+    }
+    return max;
+}
+
+int main() {
+    int x = 10000;
+    int x2 = 10000;
+    int thread_count = 4;
+
+    srand(time(NULL));
+    int** matrix = new int* [x];
+    for (int i = 0; i < x; i++) {
+        matrix[i] = new int[x2];
+        for (int j = 0; j < x2; j++) {
+            matrix[i][j] = rand() % x;
+        }
+    }
+    int* mins = new int[x];
+    auto start = std::chrono::high_resolution_clock::now();
+    #pragma omp parallel num_threads(thread_count)
+    {
+    #pragma omp for
+        for (int i = 0; i < x; i++) {
+            mins[i] = find_min_in_row(matrix[i], x2);
+        }
+    }
+    int max = find_max(mins, x);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Max value: " << max << std::endl;
+    std::cout << "Time of execution: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    for (int i{0}; i < x; ++i) {
+        delete matrix[x];
+    }
+
+    delete[] matrix;
+    delete[] mins;
+}
+
+
+===================================================================================================
+task 2(#pragma omp parallel for reduction)
+===================================================================================================
+
+#include <iostream>
+#include <omp.h>
+#include <random>
+#include <chrono>
+
+int find_min_in_row(int* row, int size, int thread_count) {
+    {
+        int min_val = row[0];
+#pragma omp parallel for reduction(min:min_val) num_threads(thread_count)
+        for (int i = 1; i < size; i++) {
+            min_val = std::min(min_val, row[i]);
+        }
+        return min_val;
+    }
+}
+
+
+int find_max(int* mins, int count, int thread_count) {
+    int max_val = mins[0];
+#pragma omp parallel for reduction(max:max_val) num_threads(thread_count)
+    for (int i = 1; i < count; i++) {
+        max_val = std::max(max_val, mins[i]);
+    }
+    return max_val;
+}
+
+
+
+int main() {
+    int x = 10000;
+    int x2 = 10000;
+    int thread_count = 4;
+
+    srand(time(NULL));
+    int** matrix = new int* [x];
+    for (int i = 0; i < x; i++) {
+        matrix[i] = new int[x2];
+        for (int j = 0; j < x2; j++) {
+            matrix[i][j] = rand() % x;
+        }
+    }
+    int* mins = new int[x];
+    auto start = std::chrono::high_resolution_clock::now();
+
+    {
+        for (int i = 0; i < x; i++) {
+            mins[i] = find_min_in_row(matrix[i], x2, thread_count);
+        }
+    }
+    int max = find_max(mins, x, thread_count);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Max value: " << max << std::endl;
+    std::cout << "Time of execution: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+}
+
+
+===================================================================================================
+results
+===================================================================================================
+
+task1:
+                                                                  -----------------------------------------------------------------------------------------------------------------------------------------------
+                                                                  |2 потока                                                             |4 потока                                                               |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Размерность матрицы 			|Время выполнения  		|Время выполнения 		|ускорение          |эффективность      |Время выполнения 			|ускорение          |эффективность      |
+(кол-во строк * кол-во столбцов)	|последовательной программы	|программы (#pragma omp for) 	|(#pragma omp for)  |(#pragma omp for)  |программы (#pragma omp for) 	|(#pragma omp for)  |(#pragma omp for)  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10000 * 10000				|217.876				|120.873        			|1.80252            |0.90126            |80.873                         |2.694051167        |0.673512792        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5000 * 5000					|60.345 				|29.456 				|2.048648832        |1.024324416        |20.496                         |2.944233021        |0.736058255        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1000 * 1000					|3.743				|2.7121         			|1.380111353        |0.690055676        |1.403                          |2.667854597        |0.666963649        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+task2:
+                                                                  -----------------------------------------------------------------------------------------------------------------------------------------------
+                                                                  |2 потока                                                             |4 потока                                                               |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Размерность матрицы 			|Время выполнения  		|Время выполнения 		|ускорение          |эффективность      |Время выполнения 			|ускорение          |эффективность      |
+(кол-во строк * кол-во столбцов)	|последовательной программы	|программы (#pragma omp for) 	|(#pragma omp for)  |(#pragma omp for)  |программы (#pragma omp for) 	|(#pragma omp for)  |(#pragma omp for)  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10000 * 10000				|217.876				|430.873        			|0.505661761        |0.252830881        |350.873                        |0.62095402         |0.155238505        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5000 * 5000					|60.345 				|130.456 				|0.462569755        |0.231284878        |90.496                        	|0.666825053        |0.166706263        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1000 * 1000					|3.743				|9.7121         			|0.385395538        |0.192697769        |7.403                          |0.505605835        |0.126401459        |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+

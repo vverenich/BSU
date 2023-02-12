@@ -1,0 +1,19 @@
+Exact integral = 143.8404975951
+
+Rectangle.
+
+Minimal step = 0.0008833922
+Integral = 143.8404932368
+Residual = 0.0000043583
+
+Simpson.
+
+Minimal step = 0.0476190476
+Integral = 143.8405017030
+Residual = -0.0000041079
+
+Gauss.
+
+Minimal number of nodes = 5
+Integral = 143.8404976178
+Real residual = -0.000000022714914

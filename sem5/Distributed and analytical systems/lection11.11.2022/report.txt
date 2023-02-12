@@ -1,0 +1,101 @@
+=================================
+(consumer-producer)
+=================================
+#include <iostream>
+#include <queue>
+#include <tuple>
+#include <condition_variable>
+#include <thread>
+#include <fstream>
+#include <algorithm>
+
+using namespace std;
+using namespace chrono_literals;
+
+queue<std::string> q;
+mutex mut;
+condition_variable cv;
+bool finished {false};
+
+std::ofstream fout("output.txt");
+std::ifstream fin("input.txt");
+
+static void producer(size_t items) {
+    while(!fin.eof()) {
+        //this_thread::sleep_for(100ms);
+        {
+            lock_guard<mutex> lk {mut};
+            std::string word;
+            fin >> word;
+            q.push(word);
+        }
+        cv.notify_all();
+    }
+    {
+        lock_guard<mutex> lk {mut};
+        finished = true;
+    }
+
+    cv.notify_all();
+}
+
+static void consumer() {
+    while (!finished) {
+        unique_lock<mutex> l {mut};
+        cv.wait(l, [] { return !q.empty() || finished; });
+        while (!q.empty()) {
+            std::reverse(std::begin(q.front()), std::end(q.front()));
+            fout << q.front() << "\n";
+            q.pop();
+        }
+    }
+}
+
+int main() {
+    auto start = std::chrono::steady_clock::now();
+
+    thread t1 {producer, 1};
+    thread t2 {consumer};
+    t1.join();
+    t2.join();
+    cout << "finished!\n";
+
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+}
+=================================
+(sequential)
+=================================
+#include <iostream>
+#include <queue>
+#include <tuple>
+#include <condition_variable>
+#include <thread>
+#include <fstream>
+#include <algorithm>
+
+std::ofstream fout("output.txt");
+std::ifstream fin("input.txt");
+
+
+
+int main() {
+    auto start = std::chrono::steady_clock::now();
+    while(!fin.eof()) {
+        std::string word;
+        fin >> word;
+        std::reverse(std::begin(word), std::end(word));
+        fout << word;
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+}
+=================================
+results
+=================================
+
+sequential(2,144 KB): 0.0383128s	parallel(2,144 KB): 0.116918s		acceleration: 0.327689492	efficiency:  0.163844746
+sequential(4,288 KB): 0.076519s	parallel(4,288 KB): 0.177556s		acceleration: 0.430956994	efficiency:  0.215478497
+sequential(8,575 KB): 0.171909s	parallel(8,575 KB): 0.390475s		acceleration: 0.440256098	efficiency:  0.220128049

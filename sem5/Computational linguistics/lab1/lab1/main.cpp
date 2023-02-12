@@ -13,7 +13,7 @@ void menu()
     QString text{};
     QStringList listOfWordsinText{};
 
-    while(true) {
+    while (true) {
         std::cout << "\n\nChoose one of the following options.\n\n";
         std::cout << "\n1) Initialize dictionary.";
         std::cout << "\n2) Get the number of words in the dictionary.";
@@ -195,6 +195,16 @@ void menu()
             for(const auto& i : mapCopy) {
                 file << i.first << "\t" << i.second << "\n";
             }
+            /*
+            uint64_t sum{};
+            for(size_t i {0};  i < mapCopy.size(); ++i) {
+                sum += mapCopy.at(i).second;
+            }
+
+            for(int64_t i {(int64_t)mapCopy.size() - 1}; i >= 0; --i) {
+                file << (double)mapCopy.at(i).second << "\t" << mapCopy.at(i).first << "\n";
+            }
+            */
 
             break;
           }

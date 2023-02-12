@@ -1,0 +1,34 @@
+6 nodes:
+
+         1       1.4       1.8       2.2       2.6         3
+   2.28269   3.27815   4.79428   7.10231   10.5996   15.8704
+
+P(x0+h/3) = P(1.13333) = 2.57005.
+Real residual : -0.000523611.
+Theoretical residual : 0.00938327.
+
+P(x[n/2]+h/3) = P(1.93333) = 5.45919.
+Real residual : -0.000106339.
+Theoretical residual : 0.00170605.
+
+P(xn-h/3) = P(2.86667) = 13.8708.
+Real residual : -0.0006728.
+Theoretical residual : 0.00938327.
+
+11 nodes:
+
+         1       1.2       1.4       1.6       1.8         2       2.2       2.4       2.6       2.8         3
+   2.28269   2.72857   3.27815   3.95659   4.79428   5.82802   7.10231   8.67106   10.5996   12.9673   15.8704
+
+P(x0+h/3) = P(1.06667) = 2.42115.
+Real residual : 1.20887e-009.
+Theoretical residual : 3.72527e-008.
+
+P(x[n/2]+h/3) = P(1.46667) = 3.4886.
+Real residual : 4.62705e-011.
+Theoretical residual : 1.38339e-009.
+
+P(xn-h/3) = P(2.93333) = 14.8364.
+Real residual : -1.40295e-009.
+Theoretical residual : 3.72527e-008.
+

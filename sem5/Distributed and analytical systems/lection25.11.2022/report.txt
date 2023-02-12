@@ -1,0 +1,411 @@
+===================================================================================================
+Code(to generate files)
+===================================================================================================
+
+#include <fstream>
+#include <vector>
+
+int main()
+{
+    std::vector<std::ofstream> files(999);
+
+    std::ofstream names100("100files.txt");
+    std::ofstream names500("500files.txt");
+    std::ofstream names1000("1000files.txt");
+    for(size_t i{1}; i <= 1000; ++i) {
+        if(i <= 100) {
+            names100 << std::to_string(i) + ".txt" << "\n";
+        }
+
+        if(i <= 500) {
+            names500 << std::to_string(i) + ".txt" << "\n";
+        }
+
+        names1000 << std::to_string(i) + ".txt" << "\n";
+    }
+
+    std::string textFromFile{};
+    std::string tmp{};
+    std::ifstream fin("1.txt");
+    while(!fin.eof()) {
+        fin >> tmp;
+        textFromFile += tmp + "\n";
+    }
+    fin.close();
+
+    for(size_t i{0}; i < files.size(); ++i) {
+        files.at(i) = std::ofstream(std::to_string(i + 2) + ".txt");
+        files.at(i) << textFromFile;
+        files.at(i).close();
+    }
+
+    return 0;
+}
+
+
+===================================================================================================
+Code task1 (delegate model 1, std::thread)
+===================================================================================================
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <thread>
+
+void count(std::string file_path, std::string word,int& counter) {
+    std::ifstream stream(file_path);
+    std::vector<std::string> words;
+    counter = 0;
+    if (stream.is_open()) {
+        while (!stream.eof()) {
+            std::string temp_;
+            stream >> temp_;
+            if (temp_ == word) {
+                counter++;
+            }
+        }
+    }
+}
+int main()
+{
+    std::ifstream fin("100files.txt");
+    std::vector<std::string> files;
+    while (!fin.eof()) {
+        std::string file_path;
+        fin >> file_path;
+        files.push_back(file_path);
+    }
+    std::vector<int> counters(files.size());
+    for (int i = 0; i < files.size(); i++)
+    {
+        std::cout << files.at(i) << "\n";
+    }
+    std::string word = "1";
+
+    clock_t start = clock();
+
+    std::vector<std::thread> threads(files.size());
+    for (int i = 0; i < files.size(); i++)
+    {
+        threads[i]=std::thread(count, files.at(i), word,
+        std::ref(counters[i]));
+    }
+    for (int i = 0; i < files.size(); i++)
+    {
+        threads[i].join();
+    }
+    for (size_t i = 0; i < counters.size(); i++)
+    {
+        std::cout << "counter " << i <<" "<< counters[i] << "\n";
+    }
+
+    clock_t end = clock();
+
+    printf("time elapsed: %.16f sec\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    return 0;
+}
+
+===================================================================================================
+Code task1 (delegate model 1, std::async)
+===================================================================================================
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <thread>
+#include <future>
+
+int count(std::string file_path, std::string word) {
+    std::ifstream stream(file_path);
+    std::vector<std::string> words;
+    int counter = 0;
+    if (stream.is_open()) {
+        while (!stream.eof()) {
+            std::string temp_;
+            stream >> temp_;
+            if (temp_ == word) {
+                counter++;
+            }
+        }
+    }
+
+    return counter;
+}
+int main()
+{
+    std::ifstream fin("100files.txt");
+    std::vector<std::string> files;
+    while (!fin.eof()) {
+        std::string file_path;
+        fin >> file_path;
+        files.push_back(file_path);
+    }
+    std::vector<std::future<int>> counters(files.size());
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        std::cout << files.at(i) << "\n";
+    }
+
+    std::string word = "1";
+
+    clock_t start = clock();
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        counters.at(i) = std::async(count, files.at(i), word);
+    }
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        std::cout << "counter " << i <<" "<< counters[i].get() << "\n";
+        //counters.at(i).get();
+    }
+
+    clock_t end = clock();
+
+    printf("time elapsed: %.16f sec\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    return 0;
+}
+
+===================================================================================================
+Code task2 (delegate model 2, WinAPI)
+===================================================================================================
+
+#include <string>
+#include <iostream>
+#include <queue>
+#include <fstream>
+
+#include <process.h>
+#include <windows.h>
+
+std::string word_for_find = "quo";
+CRITICAL_SECTION criticalSection;
+int n = 100;
+int p = 4;
+std::queue<std::string> fileNames;
+
+unsigned __stdcall ThreadFunction(void* pvParam) {
+    while (true)
+    {
+        EnterCriticalSection(&criticalSection);
+
+        if (fileNames.empty()) {
+            LeaveCriticalSection(&criticalSection);
+            break;
+        }
+
+        std::string fileName = fileNames.front();
+        fileNames.pop();
+        LeaveCriticalSection(&criticalSection);
+        std::ifstream fin;
+        fin.open(fileName);
+        int counter = 0;
+
+        while (!fin.eof())
+        {
+            std::string word;
+            fin >> word;
+
+            if (word == word_for_find) {
+                counter++;
+            }
+        }
+
+        fin.close();
+
+        EnterCriticalSection(&criticalSection);
+        std::cout << fileName << ": " << counter << std::endl;
+        LeaveCriticalSection(&criticalSection);
+    }
+}
+
+int main() {
+    InitializeCriticalSection(&criticalSection);
+
+    HANDLE* hThreads = new HANDLE[p];
+    std::ifstream fin("100files.txt");
+
+    for (int i = 0; i < n; i++) {
+        std::string word;
+        fin >> word;
+        fileNames.push(word);
+    }
+
+    fin.close();
+
+    DWORD dwStartTime = GetTickCount();
+    for (int k = 0; k < p; k++) {
+        hThreads[k] = (HANDLE)_beginthreadex(NULL, 0, ThreadFunction, NULL, 0, NULL);
+        if (hThreads[k] == NULL) {
+            printf("Create Thred %d Error=%d\n", k, GetLastError());
+            return -1;
+        }
+    }
+
+    WaitForMultipleObjects(p, hThreads, TRUE, INFINITE);
+    for (int k = 0; k < p; k++) {
+        CloseHandle(hThreads[k]);
+    }
+    DWORD dwElapsedTime = GetTickCount() - dwStartTime;
+    printf("Time = %d\n", dwElapsedTime);
+
+    DeleteCriticalSection(&criticalSection);
+
+    return 0;
+}
+
+===================================================================================================
+Code task2 (delegate model 2, OOP-implementation)
+===================================================================================================
+
+#include <string>
+#include <iostream>
+#include <queue>
+#include <fstream>
+
+#include <process.h>
+#include <windows.h>
+
+int n = 100;
+int p = 4;
+
+struct Data {
+    Data()
+    {
+        InitializeCriticalSection(&criticalSection);
+    }
+
+    ~Data()
+    {
+        DeleteCriticalSection(&criticalSection);
+    }
+
+    std::queue<std::string> fileNames;
+    std::string word_for_find = "quo";
+    CRITICAL_SECTION criticalSection;
+};
+
+struct ParallelWordCounter {
+
+    static unsigned __stdcall threadFunction(void* pvParam) {
+        Data* data = static_cast<Data*>(pvParam);
+
+        while (true)
+        {
+            EnterCriticalSection(&data->criticalSection);
+
+            if (data->fileNames.empty()) {
+                LeaveCriticalSection(&data->criticalSection);
+                break;
+            }
+
+            std::string fileName = data->fileNames.front();
+            data->fileNames.pop();
+            LeaveCriticalSection(&data->criticalSection);
+            std::ifstream fin;
+            fin.open(fileName);
+            int counter = 0;
+
+            while (!fin.eof())
+            {
+                std::string word;
+                fin >> word;
+
+                if (word == data->word_for_find) {
+                    counter++;
+                }
+            }
+
+            fin.close();
+
+            EnterCriticalSection(&data->criticalSection);
+            std::cout << fileName << ": " << counter << std::endl;
+            LeaveCriticalSection(&data->criticalSection);
+        }
+
+        return 0;
+    }
+
+    void doParallelJob(Data* data)
+    {
+        HANDLE* hThreads = new HANDLE[p];
+
+        for (int k = 0; k < p; k++) {
+            hThreads[k] = (HANDLE)_beginthreadex(NULL, 0, threadFunction, data, 0, NULL);
+            if (hThreads[k] == NULL) {
+                printf("Create Thred %d Error=%d\n", k, GetLastError());
+                return;
+            }
+        }
+
+        WaitForMultipleObjects(p, hThreads, TRUE, INFINITE);
+        for (int k = 0; k < p; k++) {
+            CloseHandle(hThreads[k]);
+        }
+    }
+};
+
+void doTask()
+{
+    // Create object of class
+    ParallelWordCounter parallelWordCounter = ParallelWordCounter();
+    Data data = Data();
+    data.word_for_find = "1";
+
+    // Fill the queue of files to read
+    std::ifstream fin("100files.txt");
+    for (int i = 0; i < n; i++) {
+        std::string word;
+        fin >> word;
+        data.fileNames.push(word);
+    }
+
+    fin.close();
+
+    // Do parallel calculations
+    DWORD dwStartTime = GetTickCount();
+
+    parallelWordCounter.doParallelJob(&data);
+
+    DWORD dwElapsedTime = GetTickCount() - dwStartTime;
+    printf("Time = %d\n", dwElapsedTime);
+}
+
+int main() {
+    doTask();
+}
+
+===================================================================================================
+results
+===================================================================================================
+
+task1:
+-------------------------------------------------------------------------------------------------------
+Размерность задачи 				|Время выполнения  	|Время выполнения 	|Ускорение	|
+(кол-во строк в файле * кол-во файлов)	|программы(std::thread)	|программы (std::async) |		|
+-------------------------------------------------------------------------------------------------------
+655360 * 100					|2.999			|3.091			|0.97023617	|
+-------------------------------------------------------------------------------------------------------
+655360 * 500					|14.72			|16.4239			|0.896254848|
+-------------------------------------------------------------------------------------------------------
+655360 * 1000					|53.581			|36.585			|1.464561979|
+-------------------------------------------------------------------------------------------------------
+
+
+task2:
+
+-------------------------------------------------------------------------------------------------------
+Размерность задачи 				|Время выполнения  	|Время выполнения 	|Ускорение	|
+(кол-во строк в файле * кол-во файлов)	|программы(WinAPI)	|программы (OOP-implem) |		|
+-------------------------------------------------------------------------------------------------------
+655360 * 100					|3328				|6265				|0.531205108|
+-------------------------------------------------------------------------------------------------------
+655360 * 500					|16766			|32250			|0.519875969|
+-------------------------------------------------------------------------------------------------------
+655360 * 1000					|39328			|63172			|0.622554296|
+-------------------------------------------------------------------------------------------------------
+

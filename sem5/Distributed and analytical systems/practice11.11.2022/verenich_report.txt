@@ -1,0 +1,345 @@
+=====================================================
+task 1
+=====================================================
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <sstream>
+#include <vector>
+#include <fstream>
+using namespace std;
+
+std::ofstream fout("output.txt");
+
+struct pcout : public stringstream {
+ static inline mutex cout_mutex;
+ ~pcout() {
+ lock_guard<mutex> l {cout_mutex};
+ cout << rdbuf();
+ cout.flush();
+ }
+};
+
+static void print_cout(int id)
+{
+    cout << "cout " << " hello " << " from " << id << '\n';
+}
+static void print_pcout(int id)
+   {
+    pcout{} << "pcout" << " hello " <<  " from " << id << '\n';
+   }
+int main()
+{
+ vector<thread> v;
+ for (size_t i {0}; i < 50; ++i) {
+ v.emplace_back(print_cout, i);
+ }
+ for (auto &t : v) { t.join(); }
+cout << "=====================\n";
+ v.clear();
+ for (size_t i {0}; i < 50; ++i) {
+ v.emplace_back(print_pcout, i);
+ }
+ for (auto &t : v) { t.join(); }
+}
+
+=====================================================
+результаты
+=====================================================
+cout  hello  from 1
+cout  hello  from 0
+cout  hello  from 4
+cout  hello  from 5
+cout  hello  from 6
+cout  hello  from 7
+cout  hello  from 11
+cout  hello  from 12
+cout  hello  from 9
+cout  hello  from 3
+cout  hello  from 17
+cout  hello  from 14
+cout  hello  from 13
+cout  hello  from 15
+cout  hello  from 8
+cout  hello  from 26
+cout  hello  from 10
+cout  hello  from 2
+cout  hello  from 20
+cout  hello  from 21
+cout  hello  from 23
+cout  hello  from 40
+cout  hello  from 25
+cout  hello  from 46
+cout  hello  from 27
+cout  hello  from 29
+cout  hello  from 19
+cout  hello  from 30
+cout  hello  from 33
+cout  hello  from 34
+cout  hello  from 35
+cout  hello  from 18
+cout  hello  from 38
+cout  hello  from 24
+cout  hello  from 41
+cout  hello  from 44
+cout  hello  from 42
+cout  hello  from 16
+cout  hello  from 28
+cout  hello  from 47
+cout  hello  from 49
+cout  hello  from 31
+cout  hello  from 32
+cout  hello  from 36
+cout  hello  from 22
+cout  hello  from 39
+cout  hello  from 43
+cout  hello  from 45
+cout  hello  from 48
+cout  hello  from 37
+=====================
+pcout hello  from 0
+pcout hello  from 1
+pcout hello  from 2
+pcout hello  from 3
+pcout hello  from 5
+pcout hello  from 4
+pcout hello  from 6
+pcout hello  from 8
+pcout hello  from 7
+pcout hello  from 13
+pcout hello  from 9
+pcout hello  from 10
+pcout hello  from 11
+pcout hello  from 12
+pcout hello  from 18
+pcout hello  from 14
+pcout hello  from 15
+pcout hello  from 16
+pcout hello  from 22
+pcout hello  from 17
+pcout hello  from 19
+pcout hello  from 25
+pcout hello  from 20
+pcout hello  from 21
+pcout hello  from 23
+pcout hello  from 24
+pcout hello  from 30
+pcout hello  from 26
+pcout hello  from 27
+pcout hello  from 28
+pcout hello  from 29
+pcout hello  from 31
+pcout hello  from 32
+pcout hello  from 33
+pcout hello  from 34
+pcout hello  from 35
+pcout hello  from 36
+pcout hello  from 37
+pcout hello  from 38
+pcout hello  from 39
+pcout hello  from 40
+pcout hello  from 41
+pcout hello  from 42
+pcout hello  from 43
+pcout hello  from 44
+pcout hello  from 45
+pcout hello  from 46
+pcout hello  from 47
+pcout hello  from 48
+pcout hello  from 49
+=====================================================
+task 2
+=====================================================
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <sstream>
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
+std::ofstream fout("output.txt");
+
+struct pcout : public stringstream {
+ static inline mutex cout_mutex;
+ ~pcout() {
+ lock_guard<mutex> l {cout_mutex};
+ fout << rdbuf();
+ fout.flush();
+ }
+};
+
+static void print_cout(int id)
+{
+    fout << "cout " << " hello " << " from " << id << '\n';
+}
+static void print_pcout(int id)
+   {
+    pcout{} << "pcout" << " hello " <<  " from " << id << '\n';
+   }
+int main()
+{
+ vector<thread> v;
+ for (size_t i {0}; i < 50; ++i) {
+ v.emplace_back(print_cout, i);
+ }
+ for (auto &t : v) { t.join(); }
+fout << "=====================\n";
+ v.clear();
+ for (size_t i {0}; i < 50; ++i) {
+ v.emplace_back(print_pcout, i);
+ }
+ for (auto &t : v) { t.join(); }
+}
+=====================================================
+результаты
+=====================================================
+cout  hello  from 1
+cout  hello  from 3
+cout  hello  from 0
+cout  hello  from 4
+cout  hello  from 6
+cout  hello  from 5
+cout  hello  from 2
+cout  hello  from 9
+cout  hello  from 8
+cout  hello  from 7
+cout  hello  from 10
+cout  hello  from 12
+cout  hello  from 13
+cout  hello  from 17
+cout  hello  from 14
+cout  hello  from 11
+cout  hello  from 15
+cout  hello  from 23
+cout  hello  from 19
+cout  hello  from 20
+cout  hello  from 21
+cout  hello  from 22
+cout  hello  from 16
+cout  hello  from 33
+cout  hello cout  hello  from 1
+cout  hello  from 3
+cout  hello  from 0
+cout  hello  from 4
+cout  hello  from 6
+cout  hello  from 5
+cout  hello  from 2
+cout  hello  from 9
+cout  hello  from 8
+cout  hello  from 7
+cout  hello  from 10
+cout  hello  from 12
+cout  hello  from 13
+cout  hello  from 17
+cout  hello  from 14
+cout  hello  from 11
+cout  hello  from 15
+cout  hello  from 23
+cout  hello  from 19
+cout  hello  from 20
+cout  hello  from 21
+cout  hello  from 22
+cout  hello  from 16
+cout  hello  from 33
+cout  hello cout  from 36
+llo  from 28
+cout  hello  from 26
+ 3
+cout  hello  from 0
+cout  hello  from 4
+cout  hello  from 6
+cout  hello  from 5
+cout  hello  from 2
+cout  hello  from 9
+cout  hello  from 8
+cout  hello  from 7
+cout  hello  from 10
+cout  hello  from 12
+cout  hello  from 13
+cout  hello  from 17
+cout  hello  from 14
+cout  hello  from 11
+cout  hello  from 15
+cout  hello  from 23
+cout  hello  from 19
+cout  hello  from 20
+cout  hello  from 21
+cout  hello  from 22
+cout  hello  from 16
+cout  hello  from 33
+cout  hello cout  hello  from 24
+cout  hello  from 31
+cout  hello  from 30
+cout  hello  from 29
+cout  hello  from 46
+cout  hello  from 47
+cout  hello  from 35
+cout  hello  from 25
+cout  hello  from 18
+cout  hello  from 34
+cout  hello  from 39
+cout  hello  from 40
+cout  hello  from 41
+cout  hello  from 42
+cout  hello  from 44
+cout  hello  from 45
+cout  hello  from 32
+cout  hello  from 48
+cout  hello  from 49
+cout  hello  from 37
+cout  hello  from 43
+cout  hello  from 38
+=====================
+pcout hello  from 0
+pcout hello  from 1
+pcout hello  from 2
+pcout hello  from 4
+pcout hello  from 3
+pcout hello  from 5
+pcout hello  from 10
+pcout hello  from 8
+pcout hello  from 9
+pcout hello  from 7
+pcout hello  from 14
+pcout hello  from 6
+pcout hello  from 12
+pcout hello  from 13
+pcout hello  from 17
+pcout hello  from 11
+pcout hello  from 19
+pcout hello  from 16
+pcout hello  from 18
+pcout hello  from 15
+pcout hello  from 20
+pcout hello  from 21
+pcout hello  from 22
+pcout hello  from 23
+pcout hello  from 27
+pcout hello  from 25
+pcout hello  from 26
+pcout hello  from 24
+pcout hello  from 31
+pcout hello  from 32
+pcout hello  from 30
+pcout hello  from 34
+pcout hello  from 29
+pcout hello  from 33
+pcout hello  from 28
+pcout hello  from 38
+pcout hello  from 35
+pcout hello  from 40
+pcout hello  from 36
+pcout hello  from 37
+pcout hello  from 39
+pcout hello  from 41
+pcout hello  from 42
+pcout hello  from 43
+pcout hello  from 44
+pcout hello  from 46
+pcout hello  from 47
+pcout hello  from 49
+pcout hello  from 45
+pcout hello  from 48
+

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">task2</string>
+    <string name="title_section1">Tab 1</string>
+    <string name="title_section2">Tab 2</string>
+    <string name="title_section3">Tab 3</string>
+    <string name="first_view">First view</string>
+    <string name="second_view">Second view</string>
+    <string name="third_view">Third view</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string-array name="items">
+        <item>First Item</item>
+        <item>Second Item</item>
+        <item>Third Item</item>
+    </string-array>
+</resources>
