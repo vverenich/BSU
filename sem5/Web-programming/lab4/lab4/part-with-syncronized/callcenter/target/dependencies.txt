@@ -1,0 +1,4 @@
+digraph "com.artem.callcenter:callcenter:jar:1.0-SNAPSHOT" { 
+	"com.artem.callcenter:callcenter:jar:1.0-SNAPSHOT" -> "junit:junit:jar:3.8.1:test" ; 
+	"com.artem.callcenter:callcenter:jar:1.0-SNAPSHOT" -> "org.projectlombok:lombok:jar:1.18.24:provided" ; 
+ } 

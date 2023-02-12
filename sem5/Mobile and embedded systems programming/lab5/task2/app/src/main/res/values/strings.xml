@@ -1,0 +1,7 @@
+<resources>
+    <string name="inst">inst: the_verchik</string>
+    <string name="next">Subscribe</string>
+    <string name="hobby">Хобби: Программирование, Математика, Физика, колле́кторство</string>
+
+    <string name="app_name">verchik\'s BIO</string>
+</resources>

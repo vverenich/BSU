@@ -1,0 +1,186 @@
+===================================================================================================
+Code(sequential)
+===================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+
+void findPrimeNumbers(int a, int b, std::vector<int>& resultVector)
+{
+    int i, j;
+    resultVector.reserve(b-a);
+
+    // Explicitly handling the cases when a is less than 2
+    // since 0 and 1 are not prime numbers
+    if (a <= 2) {
+        a = 2;
+        if (b >= 2) {
+            resultVector.emplace_back(a);
+            a++;
+        }
+    }
+
+    // MAKING SURE THAT a IS ODD BEFORE WE BEGIN
+    // THE LOOP
+    if (a % 2 == 0)
+        a++;
+
+    // NOTE : WE TRAVERSE THROUGH ODD NUMBERS ONLY
+    for (i = a; i <= b; i = i + 2) {
+
+        // flag variable to tell
+        // if i is prime or not
+        bool flag = 1;
+
+        // WE TRAVERSE TILL SQUARE ROOT OF j only.
+        // (LARGEST POSSIBLE VALUE OF A PRIME FACTOR)
+        for (j = 2; j * j <= i; ++j) {
+            if (i % j == 0) {
+                flag = 0;
+                break;
+            }
+        }
+
+        // flag = 1 means i is prime
+        // and flag = 0 means i is not prime
+
+        if (flag == 1){
+          if(i==1)
+            continue;
+          else
+            resultVector.emplace_back(i);
+        }
+    }
+}
+
+int main()
+{
+    std::vector<int> primeNumbers{};
+
+    auto start = std::chrono::steady_clock::now();
+
+    findPrimeNumbers(1, 100'000, primeNumbers);
+
+    auto end = std::chrono::steady_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+
+    return 0;
+}
+
+===================================================================================================
+Code(parallel, 4 std::async have been used)
+===================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <future>
+#include <cassert>
+
+void findPrimeNumbers(int a, int b, std::vector<int>& resultVector)
+{
+    assert((a <= b));
+
+    int i, j;
+    resultVector.reserve(b - a);
+
+    // Explicitly handling the cases when a is less than 2
+    // since 0 and 1 are not prime numbers
+    if (a <= 2) {
+        a = 2;
+        if (b >= 2) {
+            resultVector.emplace_back(a);
+            a++;
+        }
+    }
+
+    // MAKING SURE THAT a IS ODD BEFORE WE BEGIN
+    // THE LOOP
+    if (a % 2 == 0)
+        a++;
+
+    // NOTE : WE TRAVERSE THROUGH ODD NUMBERS ONLY
+    for (i = a; i <= b; i = i + 2) {
+
+        // flag variable to tell
+        // if i is prime or not
+        bool flag = 1;
+
+        // WE TRAVERSE TILL SQUARE ROOT OF j only.
+        // (LARGEST POSSIBLE VALUE OF A PRIME FACTOR)
+        for (j = 2; j * j <= i; ++j) {
+            if (i % j == 0) {
+                flag = 0;
+                break;
+            }
+        }
+
+        // flag = 1 means i is prime
+        // and flag = 0 means i is not prime
+
+        if (flag == 1){
+          if(i==1)
+            continue;
+          else
+            resultVector.emplace_back(i);
+        }
+    }
+}
+
+void doParallelCalculations(const int a, const int b, std::vector<int>& resultVector)
+{
+    assert((a <= b));
+
+    resultVector.reserve(b - a);
+    int size = b - a + 1;
+
+    std::vector<int> vector1, vector2, vector3, vector4;
+    vector1.reserve(size / 4);
+    auto future1 = std::async( findPrimeNumbers, a, a + size / 4, std::ref(vector1));
+    vector2.reserve(size / 4);
+    auto future2 = std::async( findPrimeNumbers, a + size / 4 + 1, a + size / 2, std::ref(vector2));
+    vector3.reserve(size / 4);
+    auto future3 = std::async( findPrimeNumbers, a + size / 2 + 1, a + 3 * size / 4, std::ref(vector3));
+    vector4.reserve(size / 4);
+    auto future4 = std::async( findPrimeNumbers, a + 3 * size / 4 + 1, b, std::ref(vector4));
+
+    future1.get();
+    future2.get();
+    future3.get();
+    future4.get();
+
+    resultVector.insert(resultVector.end(), vector1.begin(), vector1.end());
+    resultVector.insert(resultVector.end(), vector2.begin(), vector2.end());
+    resultVector.insert(resultVector.end(), vector3.begin(), vector3.end());
+    resultVector.insert(resultVector.end(), vector4.begin(), vector4.end());
+}
+
+int main()
+{
+    std::vector<int> primeNumbers{};
+
+    auto start = std::chrono::steady_clock::now();
+
+    doParallelCalculations(0, 100'000, primeNumbers);
+
+    auto end = std::chrono::steady_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+
+    return 0;
+}
+
+
+===================================================================================================
+results
+===================================================================================================
+
+
+
+sequential(100'000)   : 0.0058346s	parallel(100'000)	  : 0.0026261s		acceleration: 2.221773733	efficiency:  0.555443433
+sequential(1'000'000) : 0.154381s	parallel(1'000'000) : 0.0504067s		acceleration: 3.062707934	efficiency:  0.765676983
+sequential(10'000'000): 3.24595s	parallel(10'000'000): 1.23546s		acceleration: 2.627320998	efficiency:  0.656830249

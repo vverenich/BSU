@@ -1,0 +1,41 @@
+#!/bin/bash
+echo "Select command :
+1. Move file 
+2. Create file"
+
+read -p "Enter 1 or 2 :" answer
+case $answer in
+                         
+1)
+	echo "Moving file"
+
+	read -p "Enter source: " sf
+	if !( [ -w $sf ] && [ -r $sf ])
+	then
+		echo "You dont have permissions"
+		exit
+	fi
+ 
+	read -p "Enter destiny: " dest_file
+	if ( [ -f $dest_file ] && ! [ -w "$dest_file" ] )
+	then
+		echo "You dont have permissions"
+		exit
+	fi
+	mv $sf $dest_file
+	echo "file $sf moved to $dest_file"
+	;;
+2)
+	echo "Create"
+	read -p "Enter filename: " filename
+	if ( [ -f $filename ] && ! [ -w "$filename" ] )
+	then
+		echo "You dont have permissions"
+		exit
+	fi
+	touch $filename	
+	;;
+*) 
+	echo "Command unknown"
+	;;
+esac

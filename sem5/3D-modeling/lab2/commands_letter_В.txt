@@ -1,0 +1,49 @@
+; the main vertical column
+(define a (solid:block (position 0 0 0) (position 20 40 160)))
+; the bottom horizontal column
+(define a1 (solid:block (position 0 0 0) (position 60 40 20)))
+; the middle horizontal column
+(define a2 (solid:block (position 0 0 60) (position 60 40 100)))
+; the top horizontal column
+(define a3 (solid:block (position 0 0 140) (position 60 40 160)))
+;unite a and a1
+(define u1 (bool:unite a a1))
+;unite a and a2
+(define u2 (bool:unite a a2))
+;unite a and a3
+(define u3 (bool:unite a a3))
+; the little top vertical column
+(define a4 (solid:block (position 60 0 100) (position 80 40 140)))
+; the little bottom vertical column
+(define a5 (solid:block (position 60 0 20) (position 80 40 60)))
+
+(define c1 (solid:cylinder (position 60 0 140) (position 60 40 140) 20)))
+(define a_1 (solid:block (position 60 0 0) (position 80 40 160)))
+(define new_1 (bool:intersect c1 a_1))
+
+(define c2 (solid:cylinder (position 60 0 100) (position 60 40 100) 20)))
+(define a_2 (solid:block (position 60 0 0) (position 80 40 160)))
+(define new_2 (bool:intersect c2 a_2))
+
+(define c3 (solid:cylinder (position 60 0 60) (position 60 40 60) 20)))
+(define a_3 (solid:block (position 60 0 0) (position 80 40 160)))
+(define new_3 (bool:intersect c3 a_3))
+
+(define c4 (solid:cylinder (position 60 0 20) (position 60 40 20) 20)))
+(define a_4 (solid:block (position 60 0 0) (position 80 40 160)))
+(define new_4 (bool:intersect c4 a_4))
+
+;unite a4 and new_1
+(define u4 (bool:unite a4 new_1))
+;unite u4 and new_2
+(define u5 (bool:unite u4 new_2))
+
+;unite a5 and new_3
+(define u6 (bool:unite a5 new_3))
+;unite u6 and new_4
+(define u7 (bool:unite u6 new_4))
+
+;unite a and u5
+(define u8 (bool:unite a u5))
+;unite a and u7
+(define u9 (bool:unite a u7))

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="DialogText">TextView</string>
+    <string name="game_over">You won!</string>
+    <string name="app_name">Guess the number!</string>
+    <string name="behind">number is more than this one!</string>
+    <string name="ahead">number is less than this one!</string>
+    <string name="hit">Yep, this is it!</string>
+    <string name="input_value">Enter the number</string>
+    <string name="play_more">Play more</string>
+    <string name="try_to_guess">Try to guess the number(1 &#8211; 200) </string>
+    <string name="error_empty_str">You have entered nothing!</string>
+    <string name="error_too_big">You have entered the number that is more than 200!</string>
+    <string name="error_too_small">You have entered the number that is less than 1!</string>
+    <string name="textview">TextView</string>
+    <string name="button">Button</string>
+    <string name="button_play_more">Button</string>
+
+</resources>

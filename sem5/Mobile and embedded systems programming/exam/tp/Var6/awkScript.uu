@@ -1,0 +1,20 @@
+#!/usr/bin/awk -f
+BEGIN {
+  records = 0;
+  recordsWithGid = 0;
+  print "Mime :";
+  printf("%20s\t%25s\t%25s\n", "file:", "ext:", "interpreter:");
+  print "---------------------------------------------------------------------------------";
+}
+{
+  records++;
+  if($4 >= 100 && $4 <= 200) {
+    recordsWithGid++;
+  }
+  printf("%20s\t%25s\t%25s\n", $1, $6, $7);
+}
+END {
+  print "---------------------------------------------------------------------------------";
+  print "Records count:", records;
+  print "Records with GID in [100, 200]:", recordsWithGid;
+}

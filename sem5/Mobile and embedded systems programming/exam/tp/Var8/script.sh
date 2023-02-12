@@ -1,0 +1,1 @@
+awk ' BEGIN {print("MIME type (lowercased)\t\t\tExtensions\n========================================================")} {print} ($1 ~ /video\/*/) {t1 += 1} ($1 ~ /video\/*/)&&(length($2) != 0) {t2 += 1} END {print("========================================================\nMIME video type amount: ", t1, "\nMIME video type amount with extensions: ", t2)}' mime.txt > video.txt
