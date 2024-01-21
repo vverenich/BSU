@@ -1,0 +1,34 @@
+CREATE SEQUENCE seq_teacher
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+  
+CREATE SEQUENCE seq_discipline
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+
+CREATE SEQUENCE seq_control_type
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+
+CREATE SEQUENCE seq_lesson
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+
+CREATE SEQUENCE seq_group
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+
+CREATE SEQUENCE seq_student
+START WITH 1
+MAXVALUE 1000
+increment by 1;
+
+CREATE SEQUENCE seq_list
+START WITH 1
+MAXVALUE 1000
+increment by 1;

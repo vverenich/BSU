@@ -1,0 +1,15 @@
+.model small
+.stack 100h
+
+.data
+Zu db "ЯД"
+ZuZU dw 255 dup (?)
+.code
+START:	     MOV     ax, @data
+	     MOV     ds, ax
+             LEA     DX, Zu
+	     MOV     ah, 10
+	     INT     21h
+	     MOV     ah, 4ch
+ 	     INT     21h
+             END START

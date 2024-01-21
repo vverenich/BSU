@@ -1,0 +1,15 @@
+current file is: text1.txt
+FAIL:    BRUTUSBRUTUS and BRUTUS
+current file is: text2.txt
+SUCCESS: BRUTUS and BRUTUS
+current file is: text3.txt
+SUCCESS: BRUTUS and BRUTUS
+current file is: text4.txt
+SUCCESS: BRUTUS and BRUTUS
+current file is: text5.txt
+SUCCESS: BRUTUS and BRUTUS
+
+
+SUCCESSFULLY PASSED 4 FROM 5
+PROBABILITY IS 0.8
+

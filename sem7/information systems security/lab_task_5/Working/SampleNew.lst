@@ -1,0 +1,75 @@
+Microsoft (R) Macro Assembler (x64) Version 14.29.30147.0   09/27/23 16:32:33
+SampleNew.txt						     Page 1 - 1
+
+
+				; Sample x64 Assembly Program 
+				extrn      MessageBoxA: PROC 
+ 00000000			.data 
+ 00000000 36 34 2D 62 69	caption       db          '64-bit hello!', 0 
+	   74 20 68 65 6C
+	   6C 6F 21 00
+ 0000000E 48 65 6C 6C 6F	message     db          'Hello World!', 0 
+	   20 57 6F 72 6C
+	   64 21 00
+ 00000000			.code 
+
+ 00000000			Start proc   
+ 00000000  48/ 83 EC 28		        sub     rsp,28h               ; shadow space, aligns stack  
+ 00000004  48/ C7 C1		        mov    rcx, 0                  ; hWnd = HWND_DESKTOP  
+	   00000000
+ 0000000B  48/ 8D 15		        lea      rdx, message      ; LPCSTR lpText   
+	   0000000E R
+ 00000012  4C/ 8D 05		        lea      r8,  caption          ; LPCSTR lpCaption   
+	   00000000 R
+ 00000019  41/ B9		        mov    r9d, 0                    ; uType = MB_OK   
+	   00000000
+ 0000001F  E8 00000000 E	        call   MessageBoxA  ; call MessageBox API function   
+				;  mov    ecx, eax     ; uExitCode = MessageBox(...)   
+ 00000024  C6 05 00000014 R	            mov   message+6,'h'
+	   68
+ 0000002B  C6 05 00000015 R	            mov   message+7,'e'
+	   65
+ 00000032  C6 05 00000016 R	            mov   message+8,'l'
+	   6C
+ 00000039  C6 05 00000017 R	            mov   message+9,'l'
+	   6C
+ 00000040  C6 05 00000018 R	            mov   message+10,'!'
+	   21
+ 00000047  C6 05 0000000B R	            mov caption+11,'!'
+	   21
+				 ; add    rsp,28h      ; shadow space, aligns stack  
+ 0000004E  48/ C7 C1		            mov    rcx, 0       ; hWnd = HWND_DESKTOP  
+	   00000000
+ 00000055  48/ 8D 15		            lea      rdx, message ; LPCSTR lpText   
+	   0000000E R
+ 0000005C  4C/ 8D 05		            lea      r8,  caption ; LPCSTR lpCaption   
+	   00000000 R
+ 00000063  41/ B9		            mov    r9d, 0       ; uType = MB_OK   
+	   00000000
+ 00000069  E8 00000000 E	             call   MessageBoxA  ; call MessageBox API function   
+				; call ExitProcess 
+ 0000006E			Start endp
+				End
+Microsoft (R) Macro Assembler (x64) Version 14.29.30147.0   09/27/23 16:32:33
+SampleNew.txt						     Symbols 2 - 1
+
+
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+Start  . . . . . . . . . . . . .	P 	 00000000 _TEXT	Length= 0000006E Public
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+MessageBoxA  . . . . . . . . . .	L 	 00000000 External
+caption  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+message  . . . . . . . . . . . .	Byte	 0000000E _DATA	
+
+	   0 Warnings
+	   0 Errors

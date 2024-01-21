@@ -1,0 +1,52 @@
+.table{
+    text-align: center;
+    width: 70vw;
+    border: 2px;
+    justify-content: space-between;
+    margin:auto;
+
+}
+
+.table-box th{
+    border-color: gray;
+}
+
+.table-box {
+    width: 80vw;
+    background-color: #ffffff;
+
+}
+
+.strip {
+    margin: auto;
+    border-width: 0px 1px 0px 1px;
+    float: top;
+    width: 80vw;
+    min-height: calc(100vh - 81px);
+    background-color: #ffffff;
+    margin-top: 3vh;
+    font-size: 20px;
+    text-align: center;
+    font-family: calibri, serif;
+
+}
+
+.input-box{
+    float:left;
+    height:auto;
+    margin:auto;
+    width: 70vw;
+}
+
+.input-box h1{
+    margin-left:12vh;
+    font-size: 20px;
+    float:left;
+}
+
+.input-box input{
+    font-size: 20px;
+    float:left;
+    margin-left:1vw;
+    margin-top:1vw;
+}

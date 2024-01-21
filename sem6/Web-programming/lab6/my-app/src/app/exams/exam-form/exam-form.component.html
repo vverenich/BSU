@@ -1,0 +1,16 @@
+<!-- exam-form.component.html -->
+<form #examForm="ngForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" [(ngModel)]="exam.name" required>
+  </div>
+  <div>
+    <label for="mark">Mark:</label>
+    <input type="number" name="mark" [(ngModel)]="exam.mark" required>
+  </div>
+  <div>
+    <label for="enrollee">Enrollee:</label>
+    <input type="text" name="enrollee" [(ngModel)]="exam.enrollee" required>
+  </div>
+  <button type="submit">Add Exam</button>
+</form>

@@ -1,0 +1,15 @@
+<!-- exam-details.component.html -->
+<div *ngIf="exam$ | async as exam; else loading">
+  <h3>{{ exam.name }}</h3>
+  <p>Mark: {{ exam.mark }}</p>
+  <p>Enrollee: {{ exam.enrollee }}</p>
+</div>
+
+
+<ng-template #loading>
+  <div>
+    <h3>Loading...</h3>
+    <p>Mark: Loading...</p>
+    <p>Enrollee: Loading...</p>
+  </div>
+</ng-template>

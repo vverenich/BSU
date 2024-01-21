@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    User Login
+{% endblock title %}
+
+{% block content %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+
+    <!-- for login -->
+
+    <div class="wrapper fadeInDown lr">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <h4 class="mt-2">Login</h4>
+            </div>
+
+            <!-- Login Form -->
+            <form method="post" action="login">
+                {% csrf_token %}
+                <input type="text" id="username" class="fadeIn second" name="username" placeholder="enter username">
+                <input type="password" id="password" class="fadeIn third" name="password" placeholder="enter password">
+                <input type="submit" class="fadeIn fourth" value="Log In">
+            </form>
+
+            <!-- Remind signup -->
+            <div id="formFooter">
+                Don't have any account? <a class="underlineHover" href="{% url 'signup' %}"> Create New Account</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- login end -->
+
+{% endblock content %}

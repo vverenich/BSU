@@ -1,0 +1,57 @@
+.model tiny
+.code
+org 100h
+
+Begin:
+  jmp Install
+
+Old09h dd ?
+
+New09h:
+  push ds
+  push cs
+  pop ds
+  
+  push ax
+  push bx
+  in al, 60h
+
+  ; Print scan code in decimal
+  mov ah, 0
+  mov bl, al
+  xor bh, bh
+  xor dx, dx
+  mov cx, 10
+
+  div cx    ; AX = quotient, DX = remainder
+
+  push dx   ; Save remainder (least significant digit)
+  add dl, 30h
+  mov ah, 02h
+  int 21h   ; Print tens digit
+
+  pop dx    ; Retrieve remainder (ones digit)
+  add dl, 30h
+  int 21h   ; Print ones digit
+
+  pop bx
+  pop ax
+  pop ds
+  jmp DWORD PTR cs:Old09h
+
+ResSize = $ - Begin
+
+Install:
+  mov ax, 3509h
+  int 21h
+  mov WORD PTR Old09h, bx
+  mov WORD PTR Old09h+2, es
+  mov ax, 2509h
+  mov dx, offset New09h
+  int 21h
+  
+  mov ax, 3100h
+  mov dx, (ResSize+10fh)/16
+  int 21h
+
+end Begin

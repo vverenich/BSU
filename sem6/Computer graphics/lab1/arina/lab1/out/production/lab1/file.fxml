@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <Label layoutX="142.0" layoutY="239.0" text="CMYK">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="496.0" layoutY="39.0" text="XYZ">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="824.0" layoutY="239.0" text="RGB">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="62.0" layoutY="290.0" text="C">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="58.0" layoutY="370.0" text="M">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="62.0" layoutY="450.0" text="Y">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="62.0" layoutY="530.0" text="K">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="403.0" layoutY="88.0" text="X">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="401.0" layoutY="170.0" text="Y">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="402.0" layoutY="248.0" text="Z">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="733.0" layoutY="290.0" text="R">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="734.0" layoutY="370.0" text="G">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="734.0" layoutY="450.0" text="B">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <TextField fx:id="cmykCtext" style="-fx-background-color: cyan" layoutX="100.0" layoutY="290.0" prefHeight="26.0" prefWidth="156.0" />
+      <TextField fx:id="cmykMtext" layoutX="100.0" layoutY="370.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan" />
+      <TextField fx:id="cmykYtext" layoutX="100.0" layoutY="450.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="cmykKtext" layoutX="100.0" layoutY="530.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="xyzXtext" layoutX="440.0" layoutY="90.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="xyzYtext" layoutX="440.0" layoutY="170.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="xyzZtext" layoutX="440.0" layoutY="250.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="rgbRtext" layoutX="770.0" layoutY="290.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="rgbGtext" layoutX="770.0" layoutY="370.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <TextField fx:id="rgbBtext" layoutX="770.0" layoutY="450.0" prefHeight="26.0" prefWidth="156.0" style="-fx-background-color: cyan"/>
+      <ColorPicker fx:id="bar" layoutX="355.0" layoutY="383.0" onAction="#barAction" prefHeight="32.0" prefWidth="327.0" />
+      <Slider fx:id="cmykCslider" layoutX="100.0" layoutY="325.0" prefHeight="18.0" prefWidth="156.0" />
+      <Slider fx:id="cmykMslider" layoutX="100.0" layoutY="405.0" prefHeight="18.0" prefWidth="156.0" />
+      <Slider fx:id="cmykYslider" layoutX="100.0" layoutY="485.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="cmykKslider" layoutX="100.0" layoutY="565.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="xyzXslider" layoutX="440.0" layoutY="125.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="xyzYslider" layoutX="440.0" layoutY="205.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="xyzZslider" layoutX="440.0" layoutY="285.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="rgbRslider" layoutX="770.0" layoutY="325.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="rgbGslider" layoutX="770.0" layoutY="405.0" prefHeight="14.0" prefWidth="156.0" />
+      <Slider fx:id="rgbBslider" layoutX="770.0" layoutY="485.0" prefHeight="14.0" prefWidth="156.0" />
+      <Rectangle fx:id="colorField" arcHeight="5.0" arcWidth="5.0" fill="BLACK" height="200.0" layoutX="375.0" layoutY="450.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
+   </children>
+</AnchorPane>

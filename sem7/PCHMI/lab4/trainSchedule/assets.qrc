@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>calendar.png</file>
+        <file>Profile.png</file>
+    </qresource>
+</RCC>

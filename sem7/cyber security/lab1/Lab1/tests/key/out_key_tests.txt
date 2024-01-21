@@ -1,0 +1,15 @@
+current key is: key1.txt
+FAIL:    L and VLAD
+current key is: key2.txt
+SUCCESS: VLADIK and VLADIK
+current key is: key3.txt
+SUCCESS: VLADISLOVE and VLADISLOVE
+current key is: key4.txt
+SUCCESS: VLADISLAVE and VLADISLAVE
+current key is: key5.txt
+SUCCESS: VLADISLAVCHIK and VLADISLAVCHIK
+
+
+SUCCESSFULLY PASSED 4 FROM 5
+PROBABILITY IS 0.8
+

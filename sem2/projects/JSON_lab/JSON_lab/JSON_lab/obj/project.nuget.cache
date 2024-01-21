@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WTJAFaL3AIj7y/cCrXeJVC/ficceiYTJ1PrrYC9T20zbPMKZpGKdWfdT+HINVcq8KVbdDX3sG0aquIt+MeDHxw==",
+  "success": true,
+  "projectFilePath": "E:\\Влад\\ПРОГИ НА ШАРПЕ\\JSON_lab\\JSON_lab\\JSON_lab.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Влад\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Влад\\.nuget\\packages\\newtonsoft.json.schema\\3.0.14\\newtonsoft.json.schema.3.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}

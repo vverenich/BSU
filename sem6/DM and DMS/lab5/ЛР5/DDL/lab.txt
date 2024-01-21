@@ -1,0 +1,151 @@
+-- 1.	Вывести все уникальные жанры, которые встречаются в фильмах. 
+-- Отдельно найти все фильмы у которых жанр не указан.
+
+select genre
+from movie
+group by genre;
+
+select *
+from movie
+where genre = "(no genres listed)";
+
+-- 2.	Создать таблицы и загрузить в них данные из Data  ratings.csv и tags.csv.
+
+create table ratings(userId integer, movieId integer, rating float, timestamp bigint);
+create table tags(userId integer, movieId integer, tag varchar(50), timestamp bigint);
+
+SHOW VARIABLES LIKE "secure_file_priv";
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/ratings.csv'
+INTO TABLE ratings
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/tags.csv'
+INTO TABLE tags
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+-- 3.	Найти фильмы, которые имеют средний рейтинг >= 4.0. Посчитать кол-во оценок,
+--  которые были получены этими фильмами.
+
+select ratings.movieId, movie.releaseYear as releaseYear, movie.title, avg(rating) as  avgRate, count(ratings.movieId) as number_of_marks
+from ratings
+left join movie
+on ratings.movieId = movie.movieId
+group by movieId
+having avgRate >= 4.0;
+
+-- Найти фильмы, которые имеют средний рейтинг <= 2.0. Посчитать кол-во оценок, которые 
+-- были получены этими фильмами.
+-- Вывести title, releaseYear, avgRate, countMark.
+
+select ratings.movieId, movie.releaseYear as releaseYear, movie.title, avg(rating) as  avgRate, count(ratings.movieId) as number_of_marks
+from ratings
+left join movie
+on ratings.movieId = movie.movieId
+group by movieId
+having avgRate <= 2.0;
+
+-- 4.	Найти фильмы, у которых имеется тег family. 
+-- Узнать средний рейтинг для фильмов с таким тегом. 
+-- Вывести title, releaseYear, avgRate. 
+
+select ratings.movieId, movie.releaseYear as releaseYear, movie.title, avg(rating) as avgRate
+from ratings
+left join movie
+on ratings.movieId = movie.movieId
+left join tags
+on ratings.movieId = tags.movieId
+where tag = 'family'
+group by movieId;
+
+-- Найти фильмы, которые содержат в теге слово bad или stupid. 
+-- Вывести title, releaseYear.
+
+select  movie.releaseYear as releaseYear, movie.title
+from movie
+left join tags
+on movie.movieId = tags.movieId
+where tag = 'bad' or tag = 'stupid';
+
+-- 5.	Найти пользователя(ей), который поставил больше всего оценок фильмам,
+-- посчитать среднее значение его оценок.
+-- Вывести userId, countMark, avgMark.
+
+select userId, count(userId) as countMark, avg(rating) avgMark
+from ratings
+group by userId 
+order by countMark desc
+limit 1;
+
+-- 6.	Написать хранимую процедуру, которая будет принимать в качестве 
+-- параметров startYear int, finishYear int, titleTemplate text, 
+-- genresTemplate и находить фильмы согласно этим параметрам. 
+-- То есть фильмы:
+-- ●	с годом выпуска between startYear and finishYear
+-- ●	у которых в title содержится titleTemplate (регистром пренебречь)
+-- ●	у которых в жанрах содержатся все жанры из genresTemplate
+-- genresTemplate имеет формат: g1|g2|g3 или g1(если жанр один)
+-- Пример: 
+-- call usp_getRequireFilms (2010, 2015, "love", "Drama|Romance")
+ 
+-- Пояснение: Stuck in Love 2012 имеет жанры Comedy, Drama, Romance, 
+-- следовательно все жанры из genresTemplate встречаются.
+-- Love & Mercy 2014 имеет только жанр Drama, следовательно не все жанры из
+-- genresTemplate встречаются. Поэтому фильм не включён в выборку.
+
+-- Написать хранимую процедуру, которая принимает в качестве параметра title и считает рейтинг для этого фильма. 
+-- Пример: 
+-- call usp_getRequireFilms ("Stuck in Love").
+
+drop procedure usp_getRequireFilms;
+
+DELIMITER //
+
+create procedure usp_getRequireFilms (in startYear int, in finishYear int, in titleTemplate varchar(100), in genresTemplate varchar(100))
+begin
+	DECLARE a INT Default 0 ;
+    DECLARE str VARCHAR(255);
+    
+    set genresTemplate = concat(genresTemplate, '|');
+    
+    create table my_temp_table(genre varchar(50));
+    
+    simple_loop: LOOP
+         SET a=a+1;
+         select substring_index(substring_index(genresTemplate,"|",a), '|', -1) into str;
+         IF str='' THEN
+            LEAVE simple_loop;
+         END IF;
+         #Do Inserts into temp table here with str going into the row
+         insert into my_temp_table values (str);
+	END LOOP simple_loop;
+    
+    -- select *
+    -- from my_temp_table;
+    
+    select movie.title
+    from my_temp_table
+    left join movie
+    on movie.genre = my_temp_table.genre
+    where releaseYear between startYear and finishYear
+	  and lower(title) like concat('%', titleTemplate, '%')
+	group by movie.title
+    having count(my_temp_table.genre) = a - 1;
+          
+    drop table my_temp_table;
+end //
+
+DELIMITER ;
+
+call usp_getRequireFilms(1999, 2000, "", "Comedy|Horror|Thriller|Mystery");
+
+-- **Дополнительный балл:
+-- 7.	Определить Bad Data. Bad Data считаются те строки, которые не подходят 
+-- под общую модель обработки и в итоговой таблице имеют ошибки в атрибутах. 
+-- Например, сохранился неверный год.

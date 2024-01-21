@@ -1,0 +1,15 @@
+current key is: key1.txt
+SUCCESS:  and 
+current key is: key2.txt
+SUCCESS:  and 
+current key is: key3.txt
+SUCCESS:  and 
+current key is: key4.txt
+SUCCESS:  and 
+current key is: key5.txt
+SUCCESS:  and 
+
+
+SUCCESSFULLY PASSED 5 FROM 5
+PROBABILITY IS 1
+

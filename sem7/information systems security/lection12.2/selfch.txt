@@ -1,0 +1,31 @@
+.model tiny
+.code
+
+org 100h
+
+start:
+    mov ax, 1234h     ; Начальное значение
+    add ax, 5678h     ; Добавляем 5678h к AX
+
+    ; Self-modifying code
+    lea bx, new_value ; Получаем адрес нового значения
+    mov word ptr [bx], 9ABCh ; Модифицируем новое значение
+
+    add ax, word ptr [bx] ; Добавляем модифицированное значение к AX
+
+    ; Выводим результат
+    mov ah, 9h
+    mov dx, offset result
+    int 21h
+
+    ; Уничтожаем программу
+    mov ah, 4Ch
+    int 21h
+
+new_value:
+    dw 0 ; Заглушка для нового значения
+
+result:
+    db "Result: $" ; Строка "Result: $"
+
+end start

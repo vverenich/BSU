@@ -1,0 +1,6 @@
+<!-- exam-list.component.html -->
+<ul>
+  <li *ngFor="let exam of exams$ | async">
+    <a [routerLink]="[exam.id]">{{ exam.name }}</a>
+  </li>
+</ul>
