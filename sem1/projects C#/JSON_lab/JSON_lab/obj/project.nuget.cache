@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ehZ/MItj3vaN8jgu9L4jhku93dw4kQQpsdt9smbfIGDL1EJdOurqAMfEqO6b6WFDKtCGXy2qtS4VzQOLFjFXNA==",
+  "success": true,
+  "projectFilePath": "D:\\Verchick's projects C#\\JSON_lab\\JSON_lab\\JSON_lab.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json.schema\\3.0.14\\newtonsoft.json.schema.3.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}

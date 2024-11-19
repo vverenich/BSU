@@ -1,0 +1,31 @@
+﻿<Window x:Class="Calculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="NoResize">
+    <Grid LostFocus="Grid_LostFocus">
+        <Grid.Background>
+            <ImageBrush ImageSource="49804c471d67408f786b29d6a02deeef.jpg"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="label" Content="CALCULATOR" HorizontalAlignment="Left" Margin="315,31,0,0" VerticalAlignment="Top" Height="41" Width="162" RenderTransformOrigin="-0.294,-0.977" Grid.ColumnSpan="2" FontSize="25" Foreground="White"/>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="29" Margin="102,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="136" FontSize="15" TextChanged="textBox1_TextChanged"/>
+        <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="29" Margin="278,172,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" FontSize="15" Grid.ColumnSpan="2" TextChanged="textBox2_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="textBox3" HorizontalAlignment="Left" Height="29" Margin="166.2,112,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="136" FontSize="15" Grid.Column="1" TextChanged="textBox3_TextChanged" LostFocus="textBox3_LostFocus"/>
+        <Label x:Name="first_n" Content="The first number" HorizontalAlignment="Left" Margin="102,77,0,0" VerticalAlignment="Top" FontSize="15" Foreground="#FFF7F1F1"/>
+        <Label x:Name="second_n" Content="The second number" HorizontalAlignment="Left" Margin="166.2,77,0,0" VerticalAlignment="Top" Grid.Column="1" FontSize="15" Foreground="#FFF9F6F6"/>
+        <Label x:Name="result" Content="Result" HorizontalAlignment="Left" Margin="373,141,0,0" VerticalAlignment="Top" FontSize="15" Grid.ColumnSpan="2" Foreground="#FFF6EDED"/>
+        <Button x:Name="button" Content="+" HorizontalAlignment="Left" Margin="278,241,0,0" VerticalAlignment="Top" Width="82" Height="44" Click="button_Click"/>
+        <Button x:Name="button_Copy" Content="-" HorizontalAlignment="Left" Margin="44.2,241,0,0" VerticalAlignment="Top" Width="82" Height="44" Grid.Column="1" Click="button_Copy_Click"/>
+        <Button x:Name="button_Copy1" Content="*" HorizontalAlignment="Left" Margin="278,322,0,0" VerticalAlignment="Top" Width="82" Height="44" Click="button_Copy1_Click"/>
+        <Button x:Name="button_Copy2" Content="/" HorizontalAlignment="Left" Margin="44.2,322,0,0" VerticalAlignment="Top" Width="82" Height="44" Grid.Column="1" Click="button_Copy2_Click"/>
+
+    </Grid>
+</Window>
